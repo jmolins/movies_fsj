@@ -18,7 +18,9 @@ class Api {
     http.Response response = await http.get(popularUrl(page));
     Map<String, dynamic> decoded = json.decode(response.body);
     List<dynamic> lista = decoded['results'];
-    List<Movie> movies = lista.map((movie) {return Movie.fromJson(movie);}).toList();
+    List<Movie> movies = lista.map((movie) {
+      return Movie.fromJson(movie);
+    }).toList();
     return movies;
   }
 }

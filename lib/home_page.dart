@@ -1,82 +1,35 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:movies_fsj/movie_page.dart';
-import 'package:movies_fsj/api.dart';
-import 'package:movies_fsj/movie.dart';
+import 'package:movies_fsj/popular_page.dart';
+import 'package:movies_fsj/favorite_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  HomePageState createState() {
-    return new HomePageState();
-  }
+  _MoviePageState createState() => _MoviePageState();
 }
 
-class HomePageState extends State<HomePage> {
-  List<Movie> movies = [];
+class _MoviePageState extends State<HomePage> {
+  PageController _pageController = PageController();
 
-  int page = 1;
+  int _activePage = 0;
 
   @override
   void initState() {
     super.initState();
-    getMoreMovies();
+    _pageController.addListener(() {
+      setState(() {
+        _activePage = (_pageController.page + 0.5).floor();
+      });
+    });
   }
 
-  Future<List<Movie>> getMoreMovies() async {
-    movies.addAll(await Api.getMovies(page));
-    print(movies[0]);
-    setState(() {});
-  }
-
-  Widget _buildCard(Movie movie) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) {
-                return MoviePage(movie: movie);
-              })
-          );
-        },
-        child: Card(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  height: 170.0,
-                  width: 120.0,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(Api.imageUrl(movie.posterPath)),
-                        fit: BoxFit.cover),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(movie.title, style: Theme
-                            .of(context)
-                            .textTheme
-                            .subhead),
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                        Text(
-                          movie.overview,
-                          maxLines: 5,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            )),
-      ),
+  void onTap(int index) {
+    setState(() {
+      _activePage = index;
+    });
+    _pageController.animateToPage(
+      _activePage,
+      curve: Curves.easeInOut,
+      duration: Duration(milliseconds: 300),
     );
   }
 
@@ -84,25 +37,23 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Movies FSJ"),
-        brightness: Brightness.light,
-        elevation: 0.0,
-      ),
-      body: movies.isEmpty
-          ? Center(
-        child: CircularProgressIndicator(),
-      )
-          : ListView.builder(
-        itemBuilder: (context, index) {
-          if (index < movies.length)
-            return _buildCard(movies[index]);
-          else {
-            page++;
-            getMoreMovies();
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-        itemCount: movies.length + 1,
+          title: Text("Movies FSJ"),
+          centerTitle: true,
+          brightness: Brightness.light,
+          elevation: 0.0),
+      body: PageView(
+          controller: _pageController,
+          children: [PopularPage(), FavoritePage()]),
+      bottomNavigationBar: BottomNavigationBar(
+        fixedColor: Colors.red,
+        items: [
+          BottomNavigationBarItem(
+              title: Text("Populares"), icon: Icon(Icons.movie)),
+          BottomNavigationBarItem(
+              title: Text("Favoritos"), icon: Icon(Icons.favorite))
+        ],
+        currentIndex: _activePage,
+        onTap: (index) => onTap(index),
       ),
     );
   }

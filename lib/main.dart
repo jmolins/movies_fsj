@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.grey[200],
         scaffoldBackgroundColor: Colors.grey[200],
         primaryTextTheme:
-        base.primaryTextTheme.apply(bodyColor: Colors.grey[700]),
+            base.primaryTextTheme.apply(bodyColor: Colors.grey[700]),
       ),
       home: HomePage(),
     );
