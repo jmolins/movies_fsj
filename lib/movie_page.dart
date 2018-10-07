@@ -6,10 +6,18 @@ import 'package:movies_fsj/movie.dart';
 class MoviePage extends StatefulWidget {
   final Movie movie;
 
+  final AppState appState;
+
   // This is used for the hero animation
   final String callerPage;
 
-  MoviePage({@required this.movie, @required this.callerPage});
+  MoviePage({
+    @required this.movie,
+    @required this.appState,
+    @required this.callerPage,
+  })  : assert(movie != null),
+        assert(appState != null),
+        assert(callerPage != null);
 
   @override
   MoviePageState createState() {
@@ -23,16 +31,16 @@ class MoviePageState extends State<MoviePage> {
   @override
   void initState() {
     super.initState();
-    favorite = appState.isFavorite(widget.movie.id);
+    favorite = widget.appState.isFavorite(widget.movie.id);
   }
 
   void onFavorite() {
     setState(() {
       favorite = !favorite;
       if (favorite)
-        appState.addFavorite(widget.movie.id);
+        widget.appState.addFavorite(widget.movie.id);
       else
-        appState.removeFavorite(widget.movie.id);
+        widget.appState.removeFavorite(widget.movie.id);
     });
   }
 

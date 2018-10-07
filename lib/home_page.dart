@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movies_fsj/app_state.dart';
+import 'package:movies_fsj/app_state_provider.dart';
 import 'package:movies_fsj/popular_page.dart';
 import 'package:movies_fsj/favorite_page.dart';
 
@@ -35,6 +37,7 @@ class _MoviePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    AppState appState = AppStateProvider.of(context);
     return Scaffold(
       appBar: AppBar(
           title: Text("Movies FSJ"),
@@ -42,8 +45,12 @@ class _MoviePageState extends State<HomePage> {
           brightness: Brightness.light,
           elevation: 0.0),
       body: PageView(
-          controller: _pageController,
-          children: [PopularPage(), FavoritePage()]),
+        controller: _pageController,
+        children: [
+          PopularPage(appState: appState),
+          FavoritePage(appState: appState),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.red,
         items: [

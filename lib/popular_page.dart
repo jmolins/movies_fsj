@@ -5,6 +5,10 @@ import 'package:movies_fsj/api.dart';
 import 'package:movies_fsj/movie.dart';
 
 class PopularPage extends StatefulWidget {
+  final AppState appState;
+
+  PopularPage({@required this.appState}) : assert(appState != null);
+
   @override
   _PopularPageState createState() => _PopularPageState();
 }
@@ -14,24 +18,24 @@ class _PopularPageState extends State<PopularPage>
   @override
   void initState() {
     super.initState();
-    if (appState.movies.isEmpty) getMoreItems();
+    if (widget.appState.movies.isEmpty) getMoreItems();
   }
 
   getMoreItems() async {
-    List<Movie> movies = await Api.getMovies(++appState.lastPage);
-    appState.movies.addAll(movies);
+    List<Movie> movies = await Api.getMovies(++widget.appState.lastPage);
+    widget.appState.movies.addAll(movies);
     setState(() {});
   }
 
   Widget _buildPopularList() {
-    if (appState.movies.isEmpty)
+    if (widget.appState.movies.isEmpty)
       return Center(child: CircularProgressIndicator());
     else
       return ListView.builder(
         itemBuilder: (context, index) {
-          if (index < appState.movies.length) {
+          if (index < widget.appState.movies.length) {
             return MovieCard(
-              movie: appState.movies[index],
+              movie: widget.appState.movies[index],
               callerPage: "popular",
             );
           } else {
@@ -39,7 +43,7 @@ class _PopularPageState extends State<PopularPage>
             return Center(child: CircularProgressIndicator());
           }
         },
-        itemCount: appState.movies.length + 1,
+        itemCount: widget.appState.movies.length + 1,
       );
   }
 

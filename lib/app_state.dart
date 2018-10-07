@@ -19,5 +19,3 @@ class AppState {
     return favorite.contains(id);
   }
 }
-
-AppState appState = AppState();

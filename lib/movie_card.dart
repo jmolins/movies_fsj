@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_fsj/app_state_provider.dart';
 import 'package:movies_fsj/movie_page.dart';
 import 'package:movies_fsj/api.dart';
 import 'package:movies_fsj/movie.dart';
@@ -20,6 +21,7 @@ class MovieCard extends StatelessWidget {
             MaterialPageRoute(builder: (context) {
               return MoviePage(
                 movie: movie,
+                appState: AppStateProvider.of(context),
                 callerPage: callerPage,
               );
             }),
