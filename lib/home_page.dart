@@ -55,9 +55,9 @@ class _MoviePageState extends State<HomePage> {
         fixedColor: Colors.red,
         items: [
           BottomNavigationBarItem(
-              title: Text("Populares"), icon: Icon(Icons.movie)),
+              title: Text("Popular"), icon: Icon(Icons.movie)),
           BottomNavigationBarItem(
-              title: Text("Favoritos"), icon: Icon(Icons.favorite))
+              title: Text("Favorite"), icon: Icon(Icons.favorite))
         ],
         currentIndex: _activePage,
         onTap: (index) => onTap(index),
